@@ -1,0 +1,27 @@
+{
+  "name": "tamino"
+, "author": "Brian Mavity <brian@brianmavity.com> (http://www.brianmavity.com)"
+, "repository": {
+    "type": "git",
+    "url": "git://github.com/bmavity/tamino.git"
+  }
+, "bugs": {
+    "url": "https://github.com/bmavity/tamino/issues"
+  }
+, "contributors": [
+    "Brian Mavity <brian@brianmavity.com> (http://www.brianmavity.com)"
+  ]
+, "description": "Model binding with a twist"
+, "dependencies": {
+  }
+, "devDependencies": {
+  }
+, "engines": {
+    "node": "0.8.x, 0.10.x"
+  }
+, "keywords": [
+  ]
+, "license": "Modified MIT"
+, "main": "./tamino.js"
+, "version": "0.0.1"
+}
