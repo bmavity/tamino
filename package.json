@@ -13,6 +13,7 @@
   ]
 , "description": "Model binding with a twist"
 , "dependencies": {
+		"sarastro": "0.0.x"
   }
 , "devDependencies": {
   }
