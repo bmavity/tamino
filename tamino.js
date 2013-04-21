@@ -1,4 +1,4 @@
-var sarastro = require('sarastro')
+var pamina = require('pamina')
 	, util = require('util')
 	, events = require('events')
 	, handlers = {}
@@ -7,9 +7,16 @@ function hasNoValue(val) {
 	return val === undefined
 }
 
-function HandlerExecutor(req) {
+function Tamino(req) {
+	if(!(this instanceof Tamino)) {
+		return new Tamino(req)
+	}
+
 	var me = this
-	this._req = req
+
+	function emitInvalid() {
+		me.emit('invalid')
+	}
 
 	function emitResult(err, result) {
 		if(err) return me.emit('error', err)
@@ -18,47 +25,33 @@ function HandlerExecutor(req) {
 
 	function execute() {
 		var handler = handlers[req.path]	
-		console.log(req.path, handler, handlers)
-		if(!handler) return me.emit('invalid')
+		if(!handler) return me.emit('not found')
 
-		var vals = handler.args.map(me.resolveValue, me)
+		function executeHandler(vals) {
+			vals.push(emitResult)
 
-		if(vals.some(hasNoValue)) return me.emit('invalid')
+			try {
+				handler.apply({}, vals)
+			}
+			catch(ex) {
+				me.emit('error', ex)
+			}
+		}
 
-		vals.push(emitResult)
-
-		handler.fn.apply({}, vals)
+		var binder = pamina(req, handler)
+		binder.on('valid', executeHandler)
+		binder.on('invalid', emitInvalid)
 	}
 	events.EventEmitter.call(me)
 
 	process.nextTick(execute)
 }
-util.inherits(HandlerExecutor, events.EventEmitter)
+util.inherits(Tamino, events.EventEmitter)
 
-HandlerExecutor.prototype.resolveValue = function(arg) {
-	var val
-	if(this._req.params) {
-		val = this._req.params[arg]
-	}
-	if(hasNoValue(val)) {
-		val = this._req.query[arg]
-	}
-	return val
-}
-
-function wotan(req) {
-	return new HandlerExecutor(req)
-}
-
-function registerHandler(path, fn) {
-	var args = sarastro(fn)
-	args.pop()
-	handlers[path] = {
-		args: args
-	, fn: fn
-	}
+function add(path, fn) {
+	handlers[path] = fn
 }
 
 
-module.exports = wotan
-module.exports.registerHandler = registerHandler
+module.exports = Tamino
+module.exports.add = add

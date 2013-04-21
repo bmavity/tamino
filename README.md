@@ -1,2 +1,2 @@
 # tamino
-## Model binding with a dynamic twist
+## Command and Query handling for node.js
