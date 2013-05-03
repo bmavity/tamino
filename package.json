@@ -13,7 +13,7 @@
   ]
 , "description": "Command and Query handling for node.js"
 , "dependencies": {
-		"pamina": "0.0.1"
+		"pamina": "0.0.x"
   }
 , "devDependencies": {
   }
@@ -24,5 +24,5 @@
   ]
 , "license": "MIT +no-false-attribs, +no-advertising License"
 , "main": "./tamino.js"
-, "version": "0.0.3"
+, "version": "0.0.4"
 }
